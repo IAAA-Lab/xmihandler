@@ -1,0 +1,70 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+group = 'gov.nih.nci.ncicb'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.jdom:jdom:1.1.3'
+    implementation 'dom4j:dom4j:1.4'
+    implementation 'log4j:log4j:1.2.8'
+    testImplementation 'junit:junit:4.12'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'xmihandler'
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'XMI Handler'
+                description = 'The XMI Handler provides a set of APIs to read from and write into XMI files.'
+                developers {
+                    developer {
+                        email = 'fjlopez@unizar.es'
+                        name = 'Francisco J. Lopez Pellicer'
+                        url = 'https://github.com/fjlopez'
+                    }
+                }
+                licenses {
+                    license {
+                        name = 'The 3-Clause BSD License'
+                        url = 'http://ncip.github.io/xmihandler/LICENSE.txt'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/IAAA-Lab/xmihandler.git'
+                    url = 'https://github.com/IAAA-Lab/xmihandler'
+                }
+            }
+        }
+    }
+}
