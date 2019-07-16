@@ -14,7 +14,6 @@ import gov.nih.nci.ncicb.xmiinout.handler.XmiHandlerFactory;
 import gov.nih.nci.ncicb.xmiinout.handler.XmiInOutHandler;
 import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
 import org.junit.Assert;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,16 +21,11 @@ import java.util.List;
 
 public class TestArgo {
 
-  static final short RED = 31, GREEN = 32,
-          BLACK = 30, YELLOW = 33, BLUE = 34,
-          MAGENTA = 35, CYAN = 36, WHITE = 37;
-  private static Logger logger = Logger.getLogger(TestArgo.class.getName());
   private XmiInOutHandler handler = null;
   private String filename = "sdk.uml";
   private String handlerEnumType = "ArgoUMLDefault";
   private String newFileExtension = ".new.uml";
   private String modelName = "Model";
-  private boolean noColor = true;
 
   private void getModel() {
     UMLModel model = handler.getModel();
@@ -47,9 +41,7 @@ public class TestArgo {
   private void loadModel(String f) {
     try {
       handler.load("build/" + f);
-    } catch (XmiException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (XmiException | IOException e) {
       e.printStackTrace();
     }
   }
@@ -62,12 +54,6 @@ public class TestArgo {
     } // end of try-catch
   }
 
-  private void printInColor(short color, String text) {
-    if (noColor)
-      System.out.print(text);
-    else
-      System.out.print((char) 27 + "[0;" + color + ";40m" + text + (char) 27 + "[0;37;40m");
-  }
 
   @Test
   public void testSuite() {
@@ -76,7 +62,7 @@ public class TestArgo {
 
     UMLModel model = getModel(modelName);
 
-    printModel(model);
+    PrintModel.printModel(model, true);
 
     testFindClass(model, "Logical View.Logical Model.gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Payment");
 
@@ -96,8 +82,7 @@ public class TestArgo {
 
     loadModel(filename + newFileExtension);
     model = getModel(modelName);
-    printModel(model);
-
+    PrintModel.printModel(model, true);
 
   }
 
@@ -288,250 +273,6 @@ public class TestArgo {
 
   }
 
-  private void printModel(UMLModel model) {
-    System.out.println(model.getName());
-    for (UMLPackage pkg : model.getPackages()) {
-      printPackage(pkg, 0);
-    }
-    for (UMLClass clazz : model.getClasses()) {
-      printClass(clazz, 0);
-    }
-  }
-
-  private void printPackage(UMLPackage pkg, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-
-    System.out.println(pkg.getName());
-
-    for (UMLTaggedValue tv : pkg.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-    for (UMLClass clazz : pkg.getClasses()) {
-      printClass(clazz, pkgDepth);
-    }
-
-    for (UMLInterface interfaze : pkg.getInterfaces()) {
-      printInterface(interfaze, pkgDepth);
-    }
-
-    for (UMLPackage _pkg : pkg.getPackages()) {
-      printPackage(_pkg, pkgDepth + 1);
-    }
-  }
-
-  private void printClass(UMLClass clazz, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  Class: ");
-
-    if (clazz.getVisibility() != null)
-      printInColor(RED, clazz.getVisibility().getName());
-
-    System.out.println(" " + clazz.getName());
-
-    for (UMLTaggedValue tv : clazz.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-    for (UMLAttribute att : clazz.getAttributes()) {
-      printAttribute(att, pkgDepth + 1);
-    }
-
-    for (UMLGeneralization gen : clazz.getGeneralizations()) {
-      printGeneralization(gen, pkgDepth + 1);
-    }
-
-    System.out.println();
-
-    for (UMLDependency dep : clazz.getDependencies()) {
-      printDependency(dep, pkgDepth + 1);
-    }
-
-    System.out.println();
-
-    for (UMLAssociation assoc : clazz.getAssociations()) {
-      printAssociation(assoc, pkgDepth + 1);
-    }
-
-  }
-
-  private void printInterface(UMLInterface interfaze, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  Interface: ");
-
-    System.out.println(" " + interfaze.getName());
-
-    for (UMLTaggedValue tv : interfaze.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-    for (UMLAttribute att : interfaze.getAttributes()) {
-      printAttribute(att, pkgDepth + 1);
-    }
-
-    for (UMLGeneralization gen : interfaze.getGeneralizations()) {
-      printGeneralization(gen, pkgDepth + 1);
-    }
-
-    System.out.println();
-
-    for (UMLDependency dep : interfaze.getDependencies()) {
-      printDependency(dep, pkgDepth + 1);
-    }
-
-    System.out.println();
-
-    for (UMLAssociation assoc : interfaze.getAssociations()) {
-      printAssociation(assoc, pkgDepth + 1);
-    }
-
-  }
-
-  private void printAssociation(UMLAssociation assoc, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  ");
-
-
-    UMLAssociationEnd srcEnd = null, targetEnd = null;
-    for (UMLAssociationEnd assocEnd : assoc.getAssociationEnds()) {
-      if (srcEnd == null)
-        srcEnd = assocEnd;
-      else
-        targetEnd = assocEnd;
-    }
-    printInColor(GREEN,
-            "Association: "
-                    + ((UMLClass) srcEnd.getUMLElement()).getName()
-                    + "(" + srcEnd.getRoleName() + ")"
-                    + "[" + srcEnd.getLowMultiplicity() + ".."
-                    + srcEnd.getHighMultiplicity() + "]"
-                    + (srcEnd.isNavigable() ? "<" : "")
-                    + "--"
-                    + (targetEnd.isNavigable() ? ">" : "")
-                    + ((UMLClass) targetEnd.getUMLElement()).getName()
-                    + "(" + targetEnd.getRoleName() + ")"
-                    + "[" + targetEnd.getLowMultiplicity() + ".."
-                    + targetEnd.getHighMultiplicity() + "]"
-    );
-
-    System.out.println();
-
-    for (UMLTaggedValue tv : assoc.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-    System.out.println();
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  ");
-
-    printInColor(GREEN,
-            "Association from Source:"
-                    + srcEnd.getOwningAssociation().getRoleName());
-
-    System.out.println();
-    for (UMLTaggedValue tv : srcEnd.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-    System.out.println();
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  ");
-    printInColor(GREEN,
-            "Association from target:"
-                    + targetEnd.getOwningAssociation().getRoleName());
-
-    System.out.println();
-    for (UMLTaggedValue tv : targetEnd.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-
-    System.out.println();
-
-  }
-
-
-  private void printGeneralization(UMLGeneralization gen, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  ");
-
-    String subtypeName = gen.getSubtype().getName();
-    String supertypeName = gen.getSupertype().getName();
-
-    printInColor(GREEN, "Generalization: " + subtypeName + " --> " + supertypeName);
-    System.out.println();
-  }
-
-  private void printDependency(UMLDependency dep, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  ");
-
-    UMLDependencyEnd clientEnd = dep.getClient();
-    UMLDependencyEnd supplierEnd = dep.getSupplier();
-
-    String clientName = null;
-    String supplierName = null;
-
-    if (clientEnd instanceof UMLClass) {
-      clientName = ((UMLClass) (clientEnd)).getName();
-    } else if (clientEnd instanceof UMLInterface) {
-      clientName = ((UMLInterface) (clientEnd)).getName();
-    }
-
-    if (supplierEnd instanceof UMLClass) {
-      supplierName = ((UMLClass) (supplierEnd)).getName();
-    } else if (supplierEnd instanceof UMLInterface) {
-      supplierName = ((UMLInterface) (supplierEnd)).getName();
-    }
-
-    printInColor(GREEN, "Dependency: " + clientName + " --> " + supplierName + "; Stereotype: " + dep.getStereotype());
-
-    System.out.println();
-
-    for (UMLTaggedValue tv : dep.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-  }
-
-
-  private void printAttribute(UMLAttribute att, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("  ");
-
-    if (att.getVisibility() != null)
-      printInColor(RED, att.getVisibility().getName());
-
-    if (att.getDatatype() != null)
-      printInColor(RED, " " + att.getDatatype().getName());
-
-    System.out.println(" " + att.getName());
-
-    for (UMLTaggedValue tv : att.getTaggedValues()) {
-      printTaggedValue(tv, pkgDepth);
-    }
-
-  }
-
-
-  private void printTaggedValue(UMLTaggedValue tv, int pkgDepth) {
-    for (int i = 0; i < pkgDepth; i++)
-      System.out.print("  ");
-    System.out.print("   ");
-
-    printInColor(YELLOW, "tv " + tv.getName() + " : " + tv.getValue());
-
-    System.out.println();
-  }
-
   private void init() {
     try {
       handler = XmiHandlerFactory.getXmiHandler(HandlerEnum.getHandlerEnumType(handlerEnumType));
@@ -540,9 +281,4 @@ public class TestArgo {
       e.printStackTrace();
     }
   }
-
-  public void setNoColor(boolean b) {
-    noColor = b;
-  }
-
 }

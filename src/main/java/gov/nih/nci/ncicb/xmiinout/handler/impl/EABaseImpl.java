@@ -167,18 +167,18 @@ public abstract class EABaseImpl extends DefaultXmiHandler {
     for (Element tvElt : elts) {
       UMLTaggedValue tv = jdomXmiTransformer.toUMLTaggedValue(tvElt);
 
-      if (tv != null)
+      if (tv != null) {
         result.add(tv);
-
-      Attribute refAtt = tvElt.getAttribute("modelElement");
-      if (refAtt != null) {
-        UMLClassBean clazz = idClassMap.get(refAtt.getValue());
-        if (clazz != null) {
-          clazz.addTaggedValue(tv);
-        } else { // need to do it for packages
-          UMLPackageBean pkg = idPkgClassifierMap.get(refAtt.getValue());
-          if (pkg != null)
-            pkg.addTaggedValue(tv);
+        Attribute refAtt = tvElt.getAttribute("modelElement");
+        if (refAtt != null) {
+          UMLClassBean clazz = idClassMap.get(refAtt.getValue());
+          if (clazz != null) {
+            clazz.addTaggedValue(tv);
+          } else { // need to do it for packages
+            UMLPackageBean pkg = idPkgClassifierMap.get(refAtt.getValue());
+            if (pkg != null)
+              pkg.addTaggedValue(tv);
+          }
         }
       }
     }
@@ -192,7 +192,7 @@ public abstract class EABaseImpl extends DefaultXmiHandler {
     List<Element> packageElements = (List<Element>) ownedElement
             .getChildren("Package", ns);
 
-    List<UMLPackageBean> result = new ArrayList<UMLPackageBean>();
+    List<UMLPackageBean> result = new ArrayList<>();
 
     for (Element pkgElement : packageElements) {
       UMLPackageBean umlPkg = jdomXmiTransformer.toUMLPackage(pkgElement);
@@ -223,15 +223,10 @@ public abstract class EABaseImpl extends DefaultXmiHandler {
 
       result.add(umlPkg);
 
-//       try {
-//         Collection<UMLTaggedValue> taggedValues = doRootTaggedValues(pkgElement);
-//         for (UMLTaggedValue tv : taggedValues) {
-//           umlPkg.addTaggedValue(tv);
-//         }
-//       } catch (JaxenException e) {
-//         logger.error("Could not read tagged values for Package: " + umlPkg.getName());
-//         logger.error(e);
-//       } 
+      Collection<UMLTaggedValue> taggedValues = doTaggedValues(pkgElement);
+      for (UMLTaggedValue tv : taggedValues) {
+        umlPkg.addTaggedValue(tv);
+      }
 
       for (UMLPackageBean pkg : doPackages(pkgElement)) {
         umlPkg.addPackage(pkg);
@@ -254,7 +249,7 @@ public abstract class EABaseImpl extends DefaultXmiHandler {
 
     List<Element> classElements = (List<Element>) ownedElement.getChildren(
             "Class", ns);
-    List<UMLClassBean> result = new ArrayList<UMLClassBean>();
+    List<UMLClassBean> result = new ArrayList<>();
 
     for (Element classElement : classElements) {
       UMLClassBean umlClass = jdomXmiTransformer.toUMLClass(classElement,

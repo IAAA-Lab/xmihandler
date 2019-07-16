@@ -36,7 +36,7 @@ public class EADefaultImpl extends EABaseImpl {
 
     List<Element> typeElements = (List<Element>) ownedElement.getChildren("DataType", ns);
 
-    List<UMLDatatype> result = new ArrayList<UMLDatatype>();
+    List<UMLDatatype> result = new ArrayList<>();
 
     for (Element typeElt : typeElements) {
       result.add(jdomXmiTransformer.toUMLDatatype(typeElt));
@@ -49,7 +49,7 @@ public class EADefaultImpl extends EABaseImpl {
     Namespace ns = Namespace.getNamespace("omg.org/UML1.3");
     Element modelElement = elt.getChild("ModelElement.taggedValue", ns);
 
-    List<UMLTaggedValue> result = new ArrayList<UMLTaggedValue>();
+    List<UMLTaggedValue> result = new ArrayList<>();
     if (modelElement == null)
       return result;
 
@@ -92,7 +92,7 @@ public class EADefaultImpl extends EABaseImpl {
     Namespace ns = Namespace.getNamespace("omg.org/UML1.3");
     Element featureElement = classElement.getChild("Classifier.feature", ns);
 
-    List<UMLOperation> result = new ArrayList<UMLOperation>();
+    List<UMLOperation> result = new ArrayList<>();
     if (featureElement == null)
       return result;
 
@@ -120,14 +120,25 @@ public class EADefaultImpl extends EABaseImpl {
     JDOMXPath path = new JDOMXPath(xpath);
     List<Element> depElts = path.selectNodes(rootElement);
 
-    List<UMLDependency> result = new ArrayList<UMLDependency>();
+    List<UMLDependency> result = new ArrayList<>();
 
     for (Element depElt : depElts) {
-      UMLDependencyEnd client = idClassMap.get(depElt.getAttribute("client").getValue());
-      UMLDependencyEnd supplier = idClassMap.get(depElt.getAttribute("supplier").getValue());
+      Attribute clientAttribute = depElt.getAttribute("client");
+      Attribute supplierAttribute = depElt.getAttribute("supplier");
+      if (clientAttribute == null) {
+        logger.info("No client defined for dependency: " + depElt.getAttribute("xmi.id") + " -- ignoring");
+        continue;
+      }
+      if (supplierAttribute == null) {
+        logger.info("No supplier defined for dependency: " + depElt.getAttribute("xmi.id") + " -- ignoring");
+        continue;
+      }
+
+      UMLDependencyEnd client = idClassMap.get(clientAttribute.getValue());
+      UMLDependencyEnd supplier = idClassMap.get(supplierAttribute.getValue());
 
       if (client == null) {
-        client = idInterfaceMap.get(depElt.getAttribute("client").getValue());
+        client = idInterfaceMap.get(clientAttribute.getValue());
 
         if (client == null) {
           logger.info("Can't find client for dependency: " + depElt.getAttribute("xmi.id") + " -- ignoring");
@@ -135,7 +146,7 @@ public class EADefaultImpl extends EABaseImpl {
         }
       }
       if (supplier == null) {
-        supplier = idInterfaceMap.get(depElt.getAttribute("supplier").getValue());
+        supplier = idInterfaceMap.get(supplierAttribute.getValue());
 
         if (supplier == null) {
           logger.info("Can't find supplier for dependency: " + depElt.getAttribute("xmi.id") + " -- ignoring");
@@ -211,7 +222,7 @@ public class EADefaultImpl extends EABaseImpl {
     JDOMXPath path = new JDOMXPath(xpath);
     List<Element> assocElts = path.selectNodes(rootElement);
 
-    List<UMLAssociation> result = new ArrayList<UMLAssociation>();
+    List<UMLAssociation> result = new ArrayList<>();
 
     for (Element assocElt : assocElts) {
 

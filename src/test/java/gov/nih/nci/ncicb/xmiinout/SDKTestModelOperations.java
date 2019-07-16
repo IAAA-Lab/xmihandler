@@ -15,8 +15,8 @@ import gov.nih.nci.ncicb.xmiinout.handler.XmiException;
 import gov.nih.nci.ncicb.xmiinout.handler.XmiHandlerFactory;
 import gov.nih.nci.ncicb.xmiinout.handler.XmiInOutHandler;
 import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
-import org.junit.Assert;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class SDKTestModelOperations {
 
   private void saveModel() {
     try {
-      handler.save("build/"+filename + newFileExtension);
+      handler.save("build/" + filename + newFileExtension);
     } catch (Exception e) {
       e.printStackTrace();
     } // end of try-catch
@@ -77,7 +77,7 @@ public class SDKTestModelOperations {
 
     //UMLModel model = getModel(modelName);
     UMLModel model = getModel(null);
-    //gov.nih.nci.ncicb.xmiinout.TestUtil.printModel(model);
+    //gov.nih.nci.ncicb.xmiinout.Locator.printModel(model);
 
     testGetFullPackageName(model, "Logical View.Logical Model.gov.nih.nci.cacoresdk.domain.operations.Site");
     testSite(model);
@@ -91,7 +91,7 @@ public class SDKTestModelOperations {
     testGetFullPackageName(model, "Logical View.Logical Model.gov.nih.nci.cacoresdk.domain.operations.Site");
     testSite(model);
     testTestOperation(model);
-    //gov.nih.nci.ncicb.xmiinout.TestUtil.printModel(model);
+    //gov.nih.nci.ncicb.xmiinout.Locator.printModel(model);
 
 
   }
@@ -120,7 +120,7 @@ public class SDKTestModelOperations {
     UMLClass clazz = ModelUtil.findClass(model, className);
     String result = ModelUtil.getFullPackageName(clazz);
 
-    Assert.assertTrue("Testing GetFullPackageName - Found Wrong Package Name: " + result + "   For Class : " + className, pkgName.equals(result));
+    Assert.assertEquals("Testing GetFullPackageName - Found Wrong Package Name: " + result + "   For Class : " + className, pkgName, result);
 
     System.out.println("Testing GetFullPackageName - Correct Package: " + result);
   }
@@ -133,7 +133,7 @@ public class SDKTestModelOperations {
 
     Assert.assertNotNull("Class not found -- " + fullClassName + " -- " + className, clazz);
 
-    Assert.assertTrue("Class not found -- " + fullClassName + " -- " + className, clazz.getName().equals(className));
+    Assert.assertEquals("Class not found -- " + fullClassName + " -- " + className, clazz.getName(), className);
 
     System.out.println("Found Class: " + clazz.getName());
 
