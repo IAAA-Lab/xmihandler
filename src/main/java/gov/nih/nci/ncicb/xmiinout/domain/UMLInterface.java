@@ -14,12 +14,7 @@ import java.util.Set;
 /**
  * UMLClass represents a Class in a UML Model
  */
-public interface UMLInterface extends UMLTaggableElement, UMLDependencyEnd, UMLAssociable, UMLGeneralizable, UMLDatatype {
-
-  /**
-   * @return the class name
-   */
-  String getName();
+public interface UMLInterface extends UMLClassifier, UMLTaggableElement, UMLDependencyEnd, UMLAssociable, UMLGeneralizable, UMLDatatype {
 
   /**
    * @return the UMLPackage to which this class belongs

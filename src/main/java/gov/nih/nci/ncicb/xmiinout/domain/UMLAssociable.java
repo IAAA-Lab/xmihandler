@@ -13,5 +13,9 @@ package gov.nih.nci.ncicb.xmiinout.domain;
  */
 public interface UMLAssociable {
 
+  /**
+   * @return the class name
+   */
+  String getName();
 
 }
