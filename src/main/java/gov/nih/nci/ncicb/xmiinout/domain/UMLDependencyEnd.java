@@ -16,6 +16,11 @@ import java.util.Set;
 public interface UMLDependencyEnd {
 
   /**
+   * @return the class name
+   */
+  String getName();
+
+  /**
    * @return a List of all Dependencies where one end points to this element.
    */
   Set<UMLDependency> getDependencies();
