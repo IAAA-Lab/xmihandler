@@ -8,10 +8,7 @@
 
 package gov.nih.nci.ncicb.xmiinout.handler.impl;
 
-import gov.nih.nci.ncicb.xmiinout.domain.UMLAbstractModifier;
-import gov.nih.nci.ncicb.xmiinout.domain.UMLDatatype;
-import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
-import gov.nih.nci.ncicb.xmiinout.domain.UMLVisibility;
+import gov.nih.nci.ncicb.xmiinout.domain.*;
 import gov.nih.nci.ncicb.xmiinout.domain.bean.*;
 import org.apache.log4j.Logger;
 import org.jdom.Attribute;
@@ -36,6 +33,8 @@ public class JDomXmiTransformer {
       datatypes.put(((UMLDatatypeBean) datatype).getModelId(), datatype);
     else if (datatype instanceof UMLClassBean)
       datatypes.put(((UMLClassBean) datatype).getModelId(), datatype);
+    else if (datatype instanceof UMLInterfaceBean)
+      datatypes.put(((UMLInterfaceBean) datatype).getModelId(), datatype);
   }
 
   String getStereotypeName(Element stElt) {
@@ -316,7 +315,7 @@ public class JDomXmiTransformer {
           Attribute typeAtt = classifElt.getAttribute("xmi.idref");
           if (typeAtt != null) {
             String typeId = typeAtt.getValue();
-            att._setDatatype(datatypes.get(typeId));
+            att.setDatatype(datatypes.get(typeId));
           }
         }
       }

@@ -321,7 +321,7 @@ public class ArgoJDomXmiTransformer extends JDomXmiTransformer {
           Attribute typeAtt = classifElt.getAttribute("xmi.idref");
           if (typeAtt != null) {
             String typeId = typeAtt.getValue();
-            att._setDatatype(datatypes.get(typeId));
+            att.setDatatype(datatypes.get(typeId));
           }
         }
       }

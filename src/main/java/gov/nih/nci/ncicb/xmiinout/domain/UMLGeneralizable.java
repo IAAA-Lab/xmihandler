@@ -8,10 +8,18 @@
 
 package gov.nih.nci.ncicb.xmiinout.domain;
 
+import java.util.List;
+
 /**
  * Classes implement this interface to indicate that an association end can point to an object of this type.
  */
 public interface UMLGeneralizable {
 
   String getName();
+
+  /**
+   * @return a List of all Generalizations where one end points to this class.
+   */
+  List<UMLGeneralization> getGeneralizations();
+
 }

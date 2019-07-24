@@ -116,7 +116,7 @@ public class UMLAttributeBean extends JDomDomainObject implements UMLAttribute {
     return datatype;
   }
 
-  public void _setDatatype(UMLDatatype datatype) {
+  public void setDatatype(UMLDatatype datatype) {
     this.datatype = datatype;
   }
 }
