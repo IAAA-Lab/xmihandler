@@ -8,7 +8,11 @@
 
 package gov.nih.nci.ncicb.xmiinout.domain.bean;
 
-import gov.nih.nci.ncicb.xmiinout.domain.UMLDatatype;
+import gov.nih.nci.ncicb.xmiinout.domain.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class UMLDatatypeBean extends JDomDomainObject implements UMLDatatype {
 
@@ -19,7 +23,37 @@ public class UMLDatatypeBean extends JDomDomainObject implements UMLDatatype {
     this.name = name;
   }
 
+  @Override
+  public List<UMLAttribute> getAttributes() {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public UMLOperation getOperation(String name) {
+    return null;
+  }
+
+  @Override
+  public List<UMLOperation> getOperations() {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public UMLAttribute getAttribute(String name) {
+    return null;
+  }
+
   public String getName() {
     return name;
+  }
+
+  @Override
+  public Set<UMLAssociation> getAssociations() {
+    return null;
+  }
+
+  @Override
+  public List<UMLGeneralization> getGeneralizations() {
+    return Collections.emptyList();
   }
 }

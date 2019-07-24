@@ -10,7 +10,8 @@ package gov.nih.nci.ncicb.xmiinout.domain;
 
 
 /**
- * Wrapper class for a UML Datatype
+ * A representation of the model object 'Data Type'. A data type is a type whose instances are identified only by their
+ * value. A data type may contain attributes to support the modeling of structured data types.
  */
 public interface UMLDatatype extends UMLClassifier {
 
