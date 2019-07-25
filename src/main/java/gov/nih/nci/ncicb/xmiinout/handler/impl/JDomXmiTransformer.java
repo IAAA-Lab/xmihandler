@@ -8,7 +8,10 @@
 
 package gov.nih.nci.ncicb.xmiinout.handler.impl;
 
-import gov.nih.nci.ncicb.xmiinout.domain.*;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLAbstractModifier;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLDatatype;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLVisibility;
 import gov.nih.nci.ncicb.xmiinout.domain.bean.*;
 import org.apache.log4j.Logger;
 import org.jdom.Attribute;

@@ -9,7 +9,7 @@ import java.util.Set;
  * its general classifiers.
  */
 
-public interface UMLClassifier {
+public interface UMLClassifier extends UMLElement {
 
   /**
    * @return a List of all the UML Attributes belonging to this class
