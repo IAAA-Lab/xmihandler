@@ -10,6 +10,7 @@ package gov.nih.nci.ncicb.xmiinout.domain.bean;
 
 import gov.nih.nci.ncicb.xmiinout.domain.*;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -49,11 +50,36 @@ public class UMLDatatypeBean extends JDomDomainObject implements UMLDatatype {
 
   @Override
   public Set<UMLAssociation> getAssociations() {
-    return null;
+    return  Collections.emptySet();
   }
 
   @Override
   public List<UMLGeneralization> getGeneralizations() {
     return Collections.emptyList();
+  }
+
+  @Override
+  public UMLTaggedValue getTaggedValue(String name) {
+    return null;
+  }
+
+  @Override
+  public UMLTaggedValue getTaggedValue(String name, boolean ignoreCase) {
+    return null;
+  }
+
+  @Override
+  public Collection<UMLTaggedValue> getTaggedValues() {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public UMLTaggedValue addTaggedValue(String name, String value) {
+    return null;
+  }
+
+  @Override
+  public void removeTaggedValue(String name) {
+
   }
 }
